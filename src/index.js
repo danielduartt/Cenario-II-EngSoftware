@@ -1,3 +1,4 @@
+//importações necessárias para o projeto
 const express = require("express");
 const { PrismaClient } = require("@prisma/client");
 const bodyParser = require("body-parser");
@@ -31,14 +32,14 @@ app.get("/users", async (req, res) => {
 
 //rota para buscar um usuário pelo nome
 app.get("/user/:name", async (req, res) => {
-  const { name } = req.params.name;
-  const user = await prisma.user.findUnique({
+  const name = req.params.name;
+  const user = await prisma.user.findMany({
     where: {
       nome: name,
     },
   });
-  if (user) return res.status(200).send(user);
-  return res.status(404).send("User not found");
+  if (user.length > 0) return res.status(200).send(user);
+  return res.send("No user found");
 });
 
 // Inicie o servidor na porta especificada
