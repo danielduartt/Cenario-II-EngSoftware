@@ -30,11 +30,11 @@ app.get("/users", async (req, res) => {
 });
 
 //rota para buscar um usuário pelo nome
-app.get("/user/:nome", async (req, res) => {
-  const { nome } = req.params;
+app.get("/user/:name", async (req, res) => {
+  const { name } = req.params.name;
   const user = await prisma.user.findUnique({
     where: {
-      nome: nome,
+      nome: name,
     },
   });
   if (user) return res.status(200).send(user);
