@@ -24,10 +24,21 @@ app.post("/item", async (req, res) => {
 
 //rota para listar todos os usuários
 app.get("/users", async (req, res) => {
+  const users = await prisma.user.findMany();
+  if (users.length > 0) return res.status(200).send(users);
+  return res.status(404).send("No user found");
 });
 
 //rota para buscar um usuário pelo nome
 app.get("/user/:nome", async (req, res) => {
+  const { nome } = req.params;
+  const user = await prisma.user.findUnique({
+    where: {
+      nome: nome,
+    },
+  });
+  if (user) return res.status(200).send(user);
+  return res.status(404).send("User not found");
 });
 
 // Inicie o servidor na porta especificada
